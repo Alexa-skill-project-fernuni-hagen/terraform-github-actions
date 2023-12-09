@@ -12,6 +12,13 @@ on:
         description: "The terraform workspace to use"
         type: string
         required: true
+    secrets:
+      aws-access-key-id:
+        description: 'AWS Access Key ID'
+        required: true
+      aws-secret-access-key:
+        description: 'AWS Secret Access Key'
+        required: true
 
 jobs:
   terraform-apply:
@@ -45,8 +52,6 @@ jobs:
           path: ${{inputs.working-directory}}
 
       - name: Terraform Apply
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ inputs.workspace != 'default'}}
         run: |
           terraform init
@@ -55,8 +60,6 @@ jobs:
         working-directory: ${{inputs.working-directory}}
       
       - name: Terraform Apply Default
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ inputs.workspace == 'default'}}
         run: |
           terraform init
